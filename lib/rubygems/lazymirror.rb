@@ -83,6 +83,9 @@ module Rubygems
       pi = env['PATH_INFO']
 
       case pi
+      when %r!\.\./!
+        [404, {}, "Stop trying to go where you don't belong"]
+
       when %r!^/gems/!
         @counts[pi] += 1
         serve pi, env
