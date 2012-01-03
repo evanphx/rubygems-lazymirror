@@ -5,7 +5,7 @@ require 'rack'
 require 'json'
 require 'fileutils'
 
-module Rubygems
+module Gem
   class Lazymirror
     VERSION = '1.0.0'
 
