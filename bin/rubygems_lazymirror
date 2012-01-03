@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'optparse'
+
+require 'rubygems/lazymirror'
+
+host = "0.0.0.0"
+port = 8889
+
+opts = OptionParser.new do |o|
+  o.on "--host HOST", "Host to listen on" do |o|
+    host = o
+  end
+
+  o.on "-p", "--port PORT", "Port to listen on" do |o|
+    port = o
+  end
+end
+
+opts.parse! ARGV
+
+unless dir = ARGV.shift
+  STDERR.puts "Please specify the directory to use"
+  exit 1
+end
+
+puts "=== RubyGems lazy mirror ==="
+puts "Running at #{host}:#{port} under #{dir}"
+
+FileUtils.mkdir_p dir
+
+Dir.chdir dir do
+  lm = Rubygems::Lazymirror.new
+  lm.run host, port
+end

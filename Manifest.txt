@@ -1,0 +1,8 @@
+.autotest
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/rubygems-lazymirror
+lib/rubygems-lazymirror.rb
+test/test_rubygems-lazymirror.rb
