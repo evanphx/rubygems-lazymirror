@@ -35,7 +35,5 @@ puts "Running at #{host}:#{port} under #{dir}"
 
 FileUtils.mkdir_p dir
 
-Dir.chdir dir do
-  lm = Gem::Lazymirror.new(token)
-  lm.run host, port
-end
+lm = Gem::Lazymirror.new(dir, token)
+lm.run host, port

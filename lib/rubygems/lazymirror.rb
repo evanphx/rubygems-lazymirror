@@ -9,7 +9,8 @@ module Gem
   class Lazymirror
     VERSION = '1.0.0'
 
-    def initialize(token=nil)
+    def initialize(root, token=nil)
+      @root = root
       @token = /token=#{token}\b/ if token
       reset_counts
     end
@@ -46,12 +47,10 @@ module Gem
       end
     end
 
-    def download(file)
+    def download(file, dest)
       rep = fetch URI.parse("http://rubygems.org#{file}")
 
       return nil unless rep
-
-      dest = File.join(Dir.pwd, file)
 
       FileUtils.mkdir_p File.dirname(dest)
 
@@ -68,8 +67,10 @@ module Gem
     end
 
     def serve(pi, env)
-      unless File.exists?(pi)
-        unless file = download(pi)
+      file = File.join(@root, pi)
+
+      unless File.exists?(file)
+        unless file = download(pi, file)
           return [404, {}, "File '#{pi}' not available\n"]
         end
       end
