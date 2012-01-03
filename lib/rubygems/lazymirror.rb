@@ -9,7 +9,8 @@ module Gem
   class Lazymirror
     VERSION = '1.0.0'
 
-    def initialize
+    def initialize(token=nil)
+      @token = /token=#{token}\b/ if token
       reset_counts
     end
 
@@ -94,9 +95,17 @@ module Gem
         serve pi, env
 
       when "/stats"
-        [200, {}, @counts.to_json]
+        if @token and env['QUERY_STRING'] !~ @token
+          [403, {}, "Invalid token"]
+        else
+          [200, {}, @counts.to_json]
+        end
       when "/reset-stats"
-        [200, {}, reset_counts.to_json]
+        if @token and env['QUERY_STRING'] !~ @token
+          [403, {}, "Invalid token"]
+        else
+          [200, {}, reset_counts.to_json]
+        end
       else
         [302, { 'Location' => "http://rubygems.org#{pi}" }, ""]
       end
