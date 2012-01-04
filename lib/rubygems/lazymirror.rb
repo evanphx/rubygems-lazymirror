@@ -81,6 +81,9 @@ module Gem
       return rf.serving(env)
     end
 
+    OneKBlob = ["x" * 1024]
+    TenKBlob = ["x" * 10240]
+
     def call(env)
       pi = env['PATH_INFO']
 
@@ -107,6 +110,10 @@ module Gem
         else
           [200, {}, [reset_counts.to_json]]
         end
+      when "/measure/1k"
+        [200, {}, OneKBlob]
+      when "/measure/10k"
+        [200, {}, TenKBlob]
       else
         [302, { 'Location' => "http://rubygems.org#{pi}" }, [""]]
       end
