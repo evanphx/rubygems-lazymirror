@@ -86,7 +86,7 @@ module Gem
 
       case pi
       when %r!\.\./!
-        [404, {}, "Stop trying to go where you don't belong"]
+        [404, {}, ["Stop trying to go where you don't belong"]]
 
       when %r!^/gems/!
         @counts[pi] += 1
@@ -97,18 +97,18 @@ module Gem
 
       when "/stats"
         if @token and env['QUERY_STRING'] !~ @token
-          [403, {}, "Invalid token"]
+          [403, {}, ["Invalid token"]]
         else
-          [200, {}, @counts.to_json]
+          [200, {}, [@counts.to_json]]
         end
       when "/reset-stats"
         if @token and env['QUERY_STRING'] !~ @token
-          [403, {}, "Invalid token"]
+          [403, {}, ["Invalid token"]]
         else
-          [200, {}, reset_counts.to_json]
+          [200, {}, [reset_counts.to_json]]
         end
       else
-        [302, { 'Location' => "http://rubygems.org#{pi}" }, ""]
+        [302, { 'Location' => "http://rubygems.org#{pi}" }, [""]]
       end
     end
   end
